@@ -4,7 +4,7 @@ import { format } from 'date-fns';
 import { Calendar, Printer, Save, Plus, Trash2, Loader2 } from 'lucide-react';
 import { generarPDFEntrega } from '../../utils/pdfGenerator';
 import EntregaEquipoService from '../../services/EntregaEquipoService';
-import './EntregaEquipo.css';
+import '../EntregaEquipo/EntregaEquipo.css';
 
 const UBICACIONES = ['Tienda', 'Fabrica'];
 const SERVICIOS = ['Mantenimiento', 'Equipo Nuevo', 'Asignacion de equipo'];
@@ -17,7 +17,7 @@ const EQUIPOS_BASE = [
   'Modem', 'Camara WEB'
 ];
 
-const EntregaEquipo = ({ usuario }) => {
+const Asignaciones = ({ usuario }) => {
   const { register, handleSubmit, watch, formState: { errors } } = useForm({
     defaultValues: {
       fecha: format(new Date(), 'yyyy-MM-dd'),
@@ -66,7 +66,7 @@ const EntregaEquipo = ({ usuario }) => {
       if (response.success) {
         setMensaje({ 
           tipo: 'success', 
-          texto: 'Entrega guardada exitosamente. Generando PDF...' 
+          texto: 'Asignación guardada exitosamente. Generando PDF...' 
         });
         
         // Generar PDF
@@ -77,7 +77,7 @@ const EntregaEquipo = ({ usuario }) => {
       console.error('Error al procesar formulario:', error);
       setMensaje({ 
         tipo: 'error', 
-        texto: error.message || 'Error al procesar la entrega' 
+        texto: error.message || 'Error al procesar la asignación' 
       });
     } finally {
       setIsLoading(false);
@@ -152,7 +152,7 @@ const EntregaEquipo = ({ usuario }) => {
   return (
     <div className="entrega-equipo-container">
       <div className="form-header">
-        <h1>Entrega de Equipo de Cómputo</h1>
+        <h1>Asignación de Equipo</h1>
         <div className="fecha-display">
           <Calendar size={20} />
           <span>Fecha: {format(new Date(), 'dd/MM/yyyy')}</span>
@@ -514,4 +514,4 @@ const EntregaEquipo = ({ usuario }) => {
   );
 };
 
-export default EntregaEquipo;
+export default Asignaciones;

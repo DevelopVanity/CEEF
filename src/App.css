@@ -51,3 +51,8 @@ body {
   padding: 0;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
+
+.main-area{padding:16px;background:#fff;border-radius:8px;margin-top:12px}
+.main-menu + .main-area{margin-left:0}
+
+.main-menu{margin-top:12px}

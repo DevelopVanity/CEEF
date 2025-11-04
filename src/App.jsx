@@ -1,7 +1,14 @@
 import { useState, useEffect } from 'react';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import EntregaEquipo from './pages/EntregaEquipo/EntregaEquipo';
 import Login from './pages/Login/Login';
 import UserHeader from './components/UserHeader/UserHeader';
+import MainMenu from './components/MainMenu/MainMenu';
+import Reportes from './pages/Reportes/Reportes';
+import Bajas from './pages/Bajas/Bajas';
+import Mantenimiento from './pages/Mantenimiento/Mantenimiento';
+import Movimientos from './pages/Movimientos/Movimientos';
+import Asignaciones from './pages/Asignaciones/Asignaciones';
 import './App.css';
 
 function App() {
@@ -42,10 +49,23 @@ function App() {
   return (
     <div className="App">
       {usuario ? (
-        <div className="app-content">
-          <UserHeader usuario={usuario} onLogout={handleLogout} />
-          <EntregaEquipo usuario={usuario} />
-        </div>
+        <BrowserRouter>
+          <div className="app-content">
+            <UserHeader usuario={usuario} onLogout={handleLogout} />
+            <MainMenu />
+            <main className="main-area">
+              <Routes>
+                <Route path="/entregas" element={<EntregaEquipo usuario={usuario} />} />
+                <Route path="/asignaciones" element={<Asignaciones />} />
+                <Route path="/mantenimientos" element={<Mantenimiento />} />
+                <Route path="/bajas" element={<Bajas />} />
+                <Route path="/movimientos" element={<Movimientos />} />
+                <Route path="/reportes" element={<Reportes />} />
+                <Route path="/" element={<Navigate to="/entregas" replace />} />
+              </Routes>
+            </main>
+          </div>
+        </BrowserRouter>
       ) : (
         <Login onLoginSuccess={handleLoginSuccess} />
       )}

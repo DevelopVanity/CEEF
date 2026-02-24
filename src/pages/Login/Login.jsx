@@ -28,7 +28,6 @@ const Login = ({ onLoginSuccess }) => {
       const data = await response.json();
 
       if (data.success) {
-        // Guardar información del usuario en localStorage
         localStorage.setItem('usuario', JSON.stringify(data.data));
         onLoginSuccess(data.data);
       } else {

@@ -5,12 +5,10 @@ import { format } from 'date-fns';
 export const generarPDFEntrega = (datos) => {
   const doc = new jsPDF();
   
-  // Configuración inicial
   const pageWidth = doc.internal.pageSize.width;
   const pageHeight = doc.internal.pageSize.height;
   let yPosition = 20;
   
-  // Función para agregar texto centrado
   const addCenteredText = (text, y, fontSize = 12, isBold = false) => {
     doc.setFontSize(fontSize);
     if (isBold) doc.setFont(undefined, 'bold');
@@ -20,19 +18,16 @@ export const generarPDFEntrega = (datos) => {
     return y + (fontSize * 0.4);
   };
   
-  // Función para agregar línea horizontal
   const addLine = (y, margin = 10) => {
     doc.line(margin, y, pageWidth - margin, y);
     return y + 5;
   };
   
-  // Encabezado del documento
   yPosition = addCenteredText('ENTREGA DE EQUIPO DE CÓMPUTO', yPosition, 16, true);
   yPosition += 5;
   yPosition = addLine(yPosition);
   yPosition += 5;
   
-  // Información general
   doc.setFontSize(10);
   doc.setFont(undefined, 'normal');
   
@@ -41,7 +36,6 @@ export const generarPDFEntrega = (datos) => {
   doc.text(`Sobre: ${datos.sobre || ''}`, pageWidth - 80, yPosition);
   yPosition += 15;
   
-  // Datos de Usuario
   yPosition = addCenteredText('DATOS DE USUARIO', yPosition, 12, true);
   yPosition += 5;
   
@@ -55,7 +49,6 @@ export const generarPDFEntrega = (datos) => {
     [`Grupo de Trabajo:`, datos.grupoTrabajo || 'Vanity']
   ];
   
-  // Agregar campos condicionales según ubicación
   if (datos.ubicacion === 'Fabrica') {
     datosUsuario.push([`Dirección IP:`, datos.direccionIP || '']);
     datosUsuario.push([`Extensión:`, datos.extension || '']);
@@ -78,11 +71,9 @@ export const generarPDFEntrega = (datos) => {
   
   yPosition = doc.lastAutoTable.finalY + 10;
   
-  // Datos de Equipo
   yPosition = addCenteredText('DATOS DE EQUIPO', yPosition, 12, true);
   yPosition += 5;
   
-  // Filtrar equipos que tienen al menos un campo lleno
   const equiposFiltrados = datos.equipos?.filter(equipo => 
     equipo.marca || equipo.modelo || equipo.serie
   ) || [];
@@ -108,13 +99,11 @@ export const generarPDFEntrega = (datos) => {
     yPosition = doc.lastAutoTable.finalY + 10;
   }
   
-  // Verificar si necesitamos una nueva página
   if (yPosition > pageHeight - 80) {
     doc.addPage();
     yPosition = 20;
   }
   
-  // Especificaciones del CPU (si existe)
   const tieneCPU = equiposFiltrados.some(eq => eq.descripcion === 'CPU');
   if (tieneCPU && (datos.procesador || datos.memoria || datos.discoDuro || datos.versionSO)) {
     yPosition = addCenteredText('ESPECIFICACIONES DEL CPU', yPosition, 12, true);
@@ -125,7 +114,7 @@ export const generarPDFEntrega = (datos) => {
       [`Memoria:`, datos.memoria || ''],
       [`Disco Duro:`, datos.discoDuro || ''],
       [`Versión SO:`, datos.versionSO || '']
-    ].filter(([, valor]) => valor); // Solo mostrar campos con valor
+    ].filter(([, valor]) => valor);
     
     doc.autoTable({
       startY: yPosition,
@@ -142,7 +131,6 @@ export const generarPDFEntrega = (datos) => {
     yPosition = doc.lastAutoTable.finalY + 10;
   }
   
-  // Software
   if (datos.tipoOffice || datos.keyOffice) {
     yPosition = addCenteredText('SOFTWARE', yPosition, 12, true);
     yPosition += 5;
@@ -167,7 +155,6 @@ export const generarPDFEntrega = (datos) => {
     yPosition = doc.lastAutoTable.finalY + 10;
   }
   
-  // Credenciales
   if (datos.credenciales?.usuario || datos.credenciales?.password) {
     yPosition = addCenteredText('CREDENCIALES', yPosition, 12, true);
     yPosition += 5;
@@ -192,7 +179,6 @@ export const generarPDFEntrega = (datos) => {
     yPosition = doc.lastAutoTable.finalY + 10;
   }
   
-  // Servicio realizado
   if (datos.servicioRealizado) {
     yPosition = addCenteredText('SERVICIO REALIZADO', yPosition, 12, true);
     yPosition += 5;
@@ -203,7 +189,6 @@ export const generarPDFEntrega = (datos) => {
     yPosition += 15;
   }
   
-  // Información adicional
   if (datos.adicional) {
     yPosition = addCenteredText('INFORMACIÓN ADICIONAL', yPosition, 12, true);
     yPosition += 5;
@@ -215,13 +200,11 @@ export const generarPDFEntrega = (datos) => {
     yPosition += splitText.length * 4 + 10;
   }
   
-  // Verificar si necesitamos una nueva página para las notas
   if (yPosition > pageHeight - 100) {
     doc.addPage();
     yPosition = 20;
   }
   
-  // NOTAS IMPORTANTES
   yPosition = addCenteredText('NOTAS IMPORTANTES', yPosition, 12, true);
   yPosition += 5;
   yPosition = addLine(yPosition);
@@ -245,11 +228,9 @@ export const generarPDFEntrega = (datos) => {
   
   yPosition += 20;
   
-  // Firmas
   yPosition = addLine(yPosition);
   yPosition += 10;
   
-  // Firma de quien recibe
   doc.setFontSize(10);
   doc.text('Firma, nombre y fecha de quien recibe:', 15, yPosition);
   yPosition += 20;
@@ -259,7 +240,6 @@ export const generarPDFEntrega = (datos) => {
   doc.text('Nombre: _____________________________ Fecha: _______________', 15, yPosition);
   yPosition += 15;
   
-  // Firma del ingeniero
   doc.setFontSize(10);
   doc.text('Nombre y Firma Ingeniero de Soporte:', 15, yPosition);
   yPosition += 20;
@@ -268,7 +248,6 @@ export const generarPDFEntrega = (datos) => {
   doc.setFontSize(8);
   doc.text('Nombre: _____________________________ Fecha: _______________', 15, yPosition);
   
-  // Pie de página
   const totalPages = doc.internal.getNumberOfPages();
   for (let i = 1; i <= totalPages; i++) {
     doc.setPage(i);
@@ -278,7 +257,6 @@ export const generarPDFEntrega = (datos) => {
     doc.text(`Generado: ${format(new Date(), 'dd/MM/yyyy HH:mm')}`, 15, pageHeight - 10);
   }
   
-  // Guardar o mostrar PDF
   const nombreArchivo = `Entrega_Equipo_${datos.usuario || 'Usuario'}_${format(new Date(), 'yyyyMMdd')}.pdf`;
   doc.save(nombreArchivo);
   

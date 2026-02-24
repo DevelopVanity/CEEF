@@ -1,11 +1,9 @@
 import config from '../config/config.js';
 
-// Servicio para manejar las llamadas API del frontend
 const API_BASE_URL = config.API_BASE_URL;
 
 class EntregaEquipoService {
   
-  // Crear nueva entrega
   static async crearEntrega(datosEntrega) {
     try {
       const response = await fetch(`${API_BASE_URL}/entrega-equipo`, {
@@ -29,7 +27,6 @@ class EntregaEquipoService {
     }
   }
   
-  // Obtener todas las entregas
   static async obtenerEntregas(filtros = {}) {
     try {
       const queryParams = new URLSearchParams(filtros);
@@ -48,7 +45,6 @@ class EntregaEquipoService {
     }
   }
   
-  // Obtener entrega por ID
   static async obtenerEntregaPorId(id) {
     try {
       const response = await fetch(`${API_BASE_URL}/entrega-equipo/${id}`);
@@ -66,7 +62,6 @@ class EntregaEquipoService {
     }
   }
   
-  // Actualizar entrega
   static async actualizarEntrega(id, datosActualizacion) {
     try {
       const response = await fetch(`${API_BASE_URL}/entrega-equipo/${id}`, {
@@ -90,7 +85,6 @@ class EntregaEquipoService {
     }
   }
   
-  // Eliminar entrega
   static async eliminarEntrega(id) {
     try {
       const response = await fetch(`${API_BASE_URL}/entrega-equipo/${id}`, {
@@ -110,7 +104,6 @@ class EntregaEquipoService {
     }
   }
   
-  // Generar PDF
   static async generarPDF(id) {
     try {
       const response = await fetch(`${API_BASE_URL}/entrega-equipo/${id}/pdf`, {

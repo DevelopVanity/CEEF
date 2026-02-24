@@ -5,6 +5,7 @@ import { Calendar, Printer, Save, Plus, Trash2, Loader2 } from 'lucide-react';
 import { generarPDFEntrega } from '../../utils/pdfGenerator';
 import EntregaEquipoService from '../../services/EntregaEquipoService';
 import './EntregaEquipo.css';
+import Signer from '../../components/Signer/SignerClean';
 
 const UBICACIONES = ['Tienda', 'Fabrica'];
 const SERVICIOS = ['Mantenimiento', 'Equipo Nuevo', 'Asignacion de equipo'];
@@ -60,7 +61,6 @@ const EntregaEquipo = ({ usuario }) => {
         fechaCreacion: new Date().toISOString()
       };
       
-      // Guardar en el backend
       const response = await EntregaEquipoService.crearEntrega(formData);
       
       if (response.success) {
@@ -69,7 +69,6 @@ const EntregaEquipo = ({ usuario }) => {
           texto: 'Entrega guardada exitosamente. Generando PDF...' 
         });
         
-        // Generar PDF
         generarPDF(formData);
       }
       
@@ -144,7 +143,7 @@ const EntregaEquipo = ({ usuario }) => {
   };
 
   const eliminarEquipo = (index) => {
-    if (index >= EQUIPOS_BASE.length) { // Solo permitir eliminar equipos personalizados
+    if (index >= EQUIPOS_BASE.length) {
       setEquipos(equipos.filter((_, i) => i !== index));
     }
   };
@@ -287,6 +286,8 @@ const EntregaEquipo = ({ usuario }) => {
                   placeholder="1234"
                 />
               </div>
+              {/* Componente para generar claves y firmar PDFs */}
+              <Signer usuario={usuario} />
             </div>
           )}
 

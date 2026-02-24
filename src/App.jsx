@@ -9,7 +9,6 @@ function App() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Verificar si hay un usuario en localStorage al cargar la app
     const usuarioGuardado = localStorage.getItem('usuario');
     if (usuarioGuardado) {
       try {
